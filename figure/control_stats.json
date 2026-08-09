@@ -1,0 +1,77 @@
+{
+  "source_run": "results/reference_run",
+  "grouping": "five-fold GroupKFold over 17 stimulus families",
+  "tfidf": {
+    "word_1_2gram": {
+      "mean_balanced_accuracy": 0.4916666666666666,
+      "fold_scores": [
+        0.5,
+        0.5,
+        0.4583333333333333,
+        0.5,
+        0.5
+      ]
+    },
+    "character_3_5gram": {
+      "mean_balanced_accuracy": 0.51875,
+      "fold_scores": [
+        0.46875,
+        0.625,
+        0.5833333333333334,
+        0.4583333333333333,
+        0.4583333333333333
+      ]
+    }
+  },
+  "restricted_permutation": {
+    "layer": 18,
+    "observed_balanced_accuracy": 0.7874999999999999,
+    "n_permutations": 1999,
+    "raw_p_value": 0.0005,
+    "bonferroni_layers": 35,
+    "bonferroni_p_value": 0.0175,
+    "null_mean": 0.499521635817909,
+    "null_max": 0.7166666666666666,
+    "note": "Labels were shuffled only within each five-example family."
+  },
+  "residual_norm_baseline": {
+    "12": {
+      "mean_balanced_accuracy": 0.68125,
+      "fold_scores": [
+        0.65625,
+        0.5,
+        0.7916666666666667,
+        0.6666666666666666,
+        0.7916666666666667
+      ]
+    },
+    "18": {
+      "mean_balanced_accuracy": 0.4854166666666667,
+      "fold_scores": [
+        0.59375,
+        0.625,
+        0.5,
+        0.375,
+        0.3333333333333333
+      ]
+    }
+  },
+  "layer12_pca_norm_diagnostic": {
+    "raw_pc1_variance": 0.9217471709825171,
+    "pc1_norm_pearson_r": 0.999953678945294,
+    "unit_normalized_pc1_variance": 0.26051503214877686
+  },
+  "selected_sae_feature_norm_correlations": {
+    "pearson_r": {
+      "477": 0.8878759328108258,
+      "514": 0.9069674453399169,
+      "941": -0.6885053417785928,
+      "4660": -0.3132338393789714,
+      "753": 0.03664745304620735,
+      "1105": 0.3707260651837242,
+      "386": -0.06521627548403085,
+      "1223": -0.062471957086836956
+    },
+    "maximum_absolute_r": 0.9069674453399169
+  }
+}

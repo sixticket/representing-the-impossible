@@ -1,0 +1,89 @@
+{
+  "source_run": "results/reference_run",
+  "behavior": {
+    "four_way_accuracy": 0.5529411764705883,
+    "confusion_matrix": [
+      [
+        7,
+        1,
+        8,
+        1
+      ],
+      [
+        3,
+        7,
+        12,
+        2
+      ],
+      [
+        1,
+        0,
+        31,
+        0
+      ],
+      [
+        1,
+        2,
+        7,
+        2
+      ]
+    ],
+    "predicted_counts": {
+      "paradox": 58,
+      "coherent": 12,
+      "contradiction": 10,
+      "underdetermined": 5
+    }
+  },
+  "probe": {
+    "expected_best_layer": 18,
+    "expected_best_balanced_accuracy": 0.7874999642372131,
+    "predicted_best_layer": 17,
+    "predicted_best_balanced_accuracy": 0.9192307591438293,
+    "token_length_baseline": 0.5416666666666667
+  },
+  "pca": {
+    "explained_variance_ratio": {
+      "Layer 0": [
+        0.39539623260498047,
+        0.1996469497680664
+      ],
+      "Layer 12": [
+        0.9217473268508911,
+        0.02110239304602146
+      ],
+      "Layer 18": [
+        0.6194589734077454,
+        0.12461575865745544
+      ],
+      "Layer 33": [
+        0.4100921154022217,
+        0.11417221277952194
+      ]
+    }
+  },
+  "sae": {
+    "selected_feature_ids": [
+      477,
+      514,
+      941,
+      4660,
+      753,
+      1105,
+      386,
+      1223
+    ],
+    "selection_labels": {
+      "477": "coherent",
+      "514": "coherent",
+      "941": "contradiction",
+      "4660": "contradiction",
+      "753": "paradox",
+      "1105": "paradox",
+      "386": "underdetermined",
+      "1223": "underdetermined"
+    },
+    "mean_active_features_per_prompt": 10.858823529411765,
+    "selection_note": "Features were selected and displayed on the same exploratory dataset."
+  }
+}

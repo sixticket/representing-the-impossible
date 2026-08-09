@@ -27,7 +27,7 @@ plot_figures.py          Main analyses and publication figures
 Python 3.11 is recommended.
 
 ```bash
-git clone <your-repository-url>
+git clone https://github.com/sixticket/representing-the-impossible.git
 cd llm-represent
 python3.11 -m venv venv
 source venv/bin/activate
@@ -102,4 +102,3 @@ for the complete limitations and controls.
 Citation metadata are provided in `CITATION.cff`. The project code and original
 data are released under the MIT License. Model weights, SAE weights, and the
 Springer Nature template files remain subject to their respective terms.
-

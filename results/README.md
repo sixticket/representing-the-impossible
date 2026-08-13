@@ -1,10 +1,11 @@
 # Results
 
-`reference_run/` is the exact compact run used in the manuscript. It contains
-the model's responses, the final-prompt-token residual states, the run metadata,
-and the derived layer-12 SAE feature array. Model and SAE weights are not
-included.
+`reference_run/` holds the compact published record of the run reported in the
+manuscript: model responses and parsed labels (`records.jsonl`), the exact run
+configuration (`run_config.json`), probe/transfer/cosine/permutation statistics
+(`axes/axes_results.json`), and the SAE outputs for both layer-15 checkpoints
+(`sae/`). The raw activation array (21 MB) is omitted; regenerate it with
+`extract_activations.py` (deterministic greedy decoding).
 
-New extraction runs are written beside it as `gemma3_4b_<timestamp>/` and are
-ignored by Git by default because activation files can grow quickly.
-
+New runs created by the pipeline are written here as sibling directories and
+are ignored by git.

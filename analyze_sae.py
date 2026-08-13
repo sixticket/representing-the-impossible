@@ -26,13 +26,6 @@ DEFAULT_RELEASE = "gemma-scope-2-4b-it-res-all"
 DEFAULT_SAE_ID = "layer_12_width_16k_l0_small"
 
 
-def portable_path(path: Path) -> str:
-    try:
-        return str(path.resolve().relative_to(PROJECT_DIR))
-    except ValueError:
-        return str(path.resolve())
-
-
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Encode Gemma activations with a pretrained Gemma Scope 2 SAE."
@@ -272,7 +265,7 @@ def main() -> int:
 
     active_counts = (feature_acts > 0).sum(axis=1)
     metadata = {
-        "source_run": portable_path(run_dir),
+        "source_run": str(run_dir),
         "release": args.release,
         "sae_id": args.sae_id,
         "transformer_layer": layer,

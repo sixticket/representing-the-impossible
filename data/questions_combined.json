@@ -1,0 +1,827 @@
+{
+  "metadata": {
+    "title": "Combined stimuli: philosophical families + modality contrast set",
+    "version": "0.1.0",
+    "primary_language": "en",
+    "components": {
+      "philosophical": {
+        "title": "Philosophical Contradictions and Paradoxes: Seed Questions",
+        "version": "0.1.0",
+        "primary_language": "en",
+        "purpose": "Seed stimuli for examining how a language model represents contradictions, paradoxes, and related conceptual puzzles.",
+        "response_instruction": "Classify the statement using exactly one label: coherent, contradiction, paradox, or underdetermined. Then explain the classification in one sentence.",
+        "labels": {
+          "coherent": "The statement describes a logically and conceptually consistent situation.",
+          "contradiction": "The statement jointly asserts conditions that cannot all be true in the stated respect and context.",
+          "paradox": "The statement or construction generates an apparent contradiction through self-reference, circularity, infinity, or a rule system.",
+          "underdetermined": "The statement raises a genuine conceptual question but does not itself entail a contradiction."
+        },
+        "notes": [
+          "These are seed examples, not a statistically balanced evaluation set.",
+          "Paradoxes are kept separate from direct contradictions.",
+          "Each item includes a nearby coherent control and several surface-form transformations.",
+          "For activation experiments, use the full prompt and record the hidden state immediately before the model generates its classification."
+        ]
+      },
+      "modality": {
+        "title": "Modality Contrast Set: True, False, Improbable, Anomalous, Impossible",
+        "version": "0.1.0",
+        "primary_language": "en",
+        "purpose": "Topic-matched families separating necessary falsehood (impossibility) from contingent falsehood, improbability, and semantic anomaly.",
+        "design": "Each family shares one topic and contains five declarative statements: a common truth, a contingent falsehood, an improbable-but-possible claim, a semantically anomalous sentence, and a necessarily false (impossible) statement. Impossibility constructions are varied (reflexive comparison, temporal reversal, part-whole counting, definitional violation, kinship circularity, explicit conjunction) to avoid a single lexical template.",
+        "modality_encoding": "The modality of each item is encoded in its id suffix: _true, _false, _improbable, _anomalous, _impossible. The family is the id's middle token.",
+        "response_instruction": "Classify the statement using exactly one label: coherent, contradiction, paradox, or underdetermined. Then explain the classification in one sentence.",
+        "expected_label_mapping": {
+          "true": "coherent",
+          "false": "coherent",
+          "improbable": "coherent",
+          "anomalous": "underdetermined",
+          "impossible": "contradiction"
+        }
+      }
+    }
+  },
+  "prompt_template": "Statement: {statement}\n\nClassify the statement using exactly one label: coherent, contradiction, paradox, or underdetermined. Then explain the classification in one sentence.",
+  "items": [
+    {
+      "id": "law_noncontradiction_001",
+      "name": "Direct contradiction",
+      "category": "formal_logical_contradiction",
+      "statement_en": "The same proposition is both true and false at the same time and in the same respect.",
+      "statement_ko": "동일한 명제가 같은 시간, 같은 관점에서 참이면서 동시에 거짓이다.",
+      "expected_label": "contradiction",
+      "transformations": [
+        "Proposition P is true, and proposition P is not true, in precisely the same sense.",
+        "It is the case that P and not-P.",
+        "Can one proposition be both true and not true simultaneously in the very same respect?"
+      ],
+      "coherent_control": "One proposition is true while a different proposition is false at the same time.",
+      "control_expected_label": "coherent"
+    },
+    {
+      "id": "red_not_red_001",
+      "name": "Red and not red",
+      "category": "formal_logical_contradiction",
+      "statement_en": "The object is entirely red and not red at the same time, in the same place, and in the same respect.",
+      "statement_ko": "그 물체는 같은 시간과 장소, 같은 관점에서 완전히 빨갛고 동시에 빨갛지 않다.",
+      "expected_label": "contradiction",
+      "transformations": [
+        "In the same respect, the object is wholly red while also being non-red.",
+        "This object has and does not have the property of redness under identical conditions.",
+        "Is an object consistently describable as red and not red in exactly the same respect?"
+      ],
+      "coherent_control": "The object is red on one side and not red on the other side.",
+      "control_expected_label": "coherent"
+    },
+    {
+      "id": "married_bachelor_001",
+      "name": "Married bachelor",
+      "category": "definitional_contradiction",
+      "statement_en": "There exists a married bachelor.",
+      "statement_ko": "결혼한 총각이 존재한다.",
+      "expected_label": "contradiction",
+      "transformations": [
+        "A man is both married and a bachelor in the ordinary senses of those words.",
+        "Someone who has a spouse is an unmarried man.",
+        "Could a person be a married bachelor without changing either definition?"
+      ],
+      "coherent_control": "There exists a formerly married bachelor.",
+      "control_expected_label": "coherent"
+    },
+    {
+      "id": "square_circle_001",
+      "name": "Square circle",
+      "category": "definitional_contradiction",
+      "statement_en": "A plane figure is both a perfect square and a perfect circle in the same geometric respect.",
+      "statement_ko": "하나의 평면 도형이 같은 기하학적 관점에서 완전한 정사각형이면서 완전한 원이다.",
+      "expected_label": "contradiction",
+      "transformations": [
+        "There is a Euclidean square circle.",
+        "One ordinary plane figure has exactly four straight sides and a boundary whose points are all equally distant from its center.",
+        "Can an ordinary Euclidean figure be simultaneously a square and a circle?"
+      ],
+      "coherent_control": "A square is drawn inside a circle.",
+      "control_expected_label": "coherent"
+    },
+    {
+      "id": "three_sided_square_001",
+      "name": "Three-sided square",
+      "category": "definitional_contradiction",
+      "statement_en": "This Euclidean square has exactly three sides.",
+      "statement_ko": "이 유클리드 정사각형은 정확히 세 변을 가진다.",
+      "expected_label": "contradiction",
+      "transformations": [
+        "A three-sided figure is an ordinary square.",
+        "The polygon has four sides by definition, yet it has only three sides.",
+        "Can a Euclidean square have exactly three edges?"
+      ],
+      "coherent_control": "This Euclidean square has exactly four sides.",
+      "control_expected_label": "coherent"
+    },
+    {
+      "id": "largest_integer_001",
+      "name": "Largest integer",
+      "category": "mathematical_contradiction",
+      "statement_en": "There is a largest integer, and adding one to it does not produce a larger integer.",
+      "statement_ko": "가장 큰 정수가 존재하며, 거기에 1을 더해도 더 큰 정수가 되지 않는다.",
+      "expected_label": "contradiction",
+      "transformations": [
+        "Some integer N is greater than or equal to every integer, including N plus one.",
+        "The integers end at a final greatest member.",
+        "Can the ordinary integers contain a greatest integer?"
+      ],
+      "coherent_control": "A finite set of integers has a largest member.",
+      "control_expected_label": "coherent"
+    },
+    {
+      "id": "liar_001",
+      "name": "Liar paradox",
+      "category": "self_referential_paradox",
+      "statement_en": "This sentence is false.",
+      "statement_ko": "이 문장은 거짓이다.",
+      "expected_label": "paradox",
+      "transformations": [
+        "The sentence you are now reading is not true.",
+        "This very assertion asserts its own falsity.",
+        "Is the statement 'This statement is false' true or false?"
+      ],
+      "coherent_control": "The previous sentence is false.",
+      "control_expected_label": "coherent"
+    },
+    {
+      "id": "strengthened_liar_001",
+      "name": "Strengthened liar paradox",
+      "category": "self_referential_paradox",
+      "statement_en": "This sentence is not true.",
+      "statement_ko": "이 문장은 참이 아니다.",
+      "expected_label": "paradox",
+      "transformations": [
+        "The present statement fails to be true.",
+        "This very utterance has no truth.",
+        "Can the sentence 'This sentence is not true' consistently be assigned a truth value?"
+      ],
+      "coherent_control": "The sentence 'Snow is black' is not true under ordinary conditions.",
+      "control_expected_label": "coherent"
+    },
+    {
+      "id": "epimenides_001",
+      "name": "Epimenides-style liar",
+      "category": "self_referential_paradox",
+      "statement_en": "A Cretan says, 'Every statement made by a Cretan is false.'",
+      "statement_ko": "한 크레타인이 '모든 크레타인의 발언은 거짓이다'라고 말한다.",
+      "expected_label": "underdetermined",
+      "transformations": [
+        "Someone from Crete declares that no Cretan ever speaks truly.",
+        "A member of a group claims that every claim by members of that group is false.",
+        "Does a Cretan saying 'All Cretans always lie' create a strict contradiction by itself?"
+      ],
+      "coherent_control": "A Cretan says, 'Some statements made by Cretans are false.'",
+      "control_expected_label": "coherent"
+    },
+    {
+      "id": "russell_001",
+      "name": "Russell's paradox",
+      "category": "set_theoretic_paradox",
+      "statement_en": "Let R be the set of all sets that are not members of themselves. R is a member of itself if and only if R is not a member of itself.",
+      "statement_ko": "자기 자신을 원소로 포함하지 않는 모든 집합의 집합을 R이라 하자. R은 자기 자신의 원소일 때 그리고 오직 그때에만 자기 자신의 원소가 아니다.",
+      "expected_label": "paradox",
+      "transformations": [
+        "The set of every non-self-membered set belongs to itself exactly when it does not belong to itself.",
+        "Define R = {x | x is not an element of x}; asking whether R is an element of R yields both alternatives.",
+        "Does the unrestricted set of all sets that do not contain themselves contain itself?"
+      ],
+      "coherent_control": "Let R be the set of all finite sets that are not members of themselves.",
+      "control_expected_label": "coherent"
+    },
+    {
+      "id": "barber_001",
+      "name": "Barber paradox",
+      "category": "self_referential_paradox",
+      "statement_en": "A barber shaves all and only those villagers who do not shave themselves.",
+      "statement_ko": "한 이발사는 스스로 면도하지 않는 마을 사람들만, 그리고 그들 모두를 면도한다.",
+      "expected_label": "paradox",
+      "transformations": [
+        "The barber shaves exactly every person in the village who does not shave themself.",
+        "For every villager x, the barber shaves x if and only if x does not shave x.",
+        "Under this rule, can the barber consistently either shave or not shave himself?"
+      ],
+      "coherent_control": "A barber shaves every villager who requests a shave but does not shave himself.",
+      "control_expected_label": "coherent"
+    },
+    {
+      "id": "omnipotence_stone_001",
+      "name": "Omnipotence paradox",
+      "category": "conceptual_paradox",
+      "statement_en": "An omnipotent being creates a stone that the being cannot lift.",
+      "statement_ko": "전능한 존재가 자신이 들 수 없는 돌을 만든다.",
+      "expected_label": "paradox",
+      "transformations": [
+        "A being capable of every action makes an object that defeats its own power.",
+        "An all-powerful agent performs the task of making something it is powerless to move.",
+        "Can an omnipotent being make a stone too heavy for that same being to lift?"
+      ],
+      "coherent_control": "A very powerful but limited being creates a stone that it cannot lift.",
+      "control_expected_label": "coherent"
+    },
+    {
+      "id": "irresistible_immovable_001",
+      "name": "Irresistible force and immovable object",
+      "category": "definitional_paradox",
+      "statement_en": "An irresistible force strikes an absolutely immovable object.",
+      "statement_ko": "멈출 수 없는 힘이 절대로 움직일 수 없는 물체와 충돌한다.",
+      "expected_label": "paradox",
+      "transformations": [
+        "A force that nothing can stop meets an object that nothing can move.",
+        "The perfectly unstoppable encounters the perfectly unmovable.",
+        "What happens when an irresistible force meets an immovable object?"
+      ],
+      "coherent_control": "A very strong force strikes an object that is extremely difficult to move.",
+      "control_expected_label": "coherent"
+    },
+    {
+      "id": "grandfather_001",
+      "name": "Grandfather paradox",
+      "category": "causal_paradox",
+      "statement_en": "A time traveler goes into the past and prevents their own grandfather from having children, while the traveler still exists as that grandchild.",
+      "statement_ko": "시간 여행자가 과거로 가서 자신의 할아버지가 자녀를 갖지 못하게 하지만, 그 시간 여행자는 여전히 그 손주로 존재한다.",
+      "expected_label": "paradox",
+      "transformations": [
+        "A traveler erases a necessary cause of their own birth without erasing themself.",
+        "Someone exists because of an event and then travels backward to prevent that event while continuing to exist.",
+        "Can a person prevent their own ancestry and nevertheless remain the descendant produced by it?"
+      ],
+      "coherent_control": "A time traveler goes into the past and unsuccessfully attempts to prevent their grandfather from having children.",
+      "control_expected_label": "coherent"
+    },
+    {
+      "id": "sorites_001",
+      "name": "Sorites paradox",
+      "category": "vagueness_paradox",
+      "statement_en": "One grain of sand is not a heap, and adding a single grain can never turn a non-heap into a heap; therefore, no number of grains forms a heap.",
+      "statement_ko": "모래 한 알은 더미가 아니며 한 알을 더하는 것으로 더미 아닌 것이 더미가 될 수는 없으므로, 어떤 수의 모래알도 더미를 이루지 못한다.",
+      "expected_label": "paradox",
+      "transformations": [
+        "If one grain is not a heap and one extra grain never makes the decisive difference, then even a million grains are not a heap.",
+        "Repeatedly applying the harmless-looking one-grain step eliminates every possible heap.",
+        "If adding one grain never creates a heap, how can any heap exist?"
+      ],
+      "coherent_control": "One grain is not ordinarily called a heap, while a million grains often are.",
+      "control_expected_label": "coherent"
+    },
+    {
+      "id": "ship_theseus_001",
+      "name": "Ship of Theseus",
+      "category": "identity_puzzle",
+      "statement_en": "Every plank of a ship is gradually replaced, and the resulting ship is claimed to be numerically identical to the original ship.",
+      "statement_ko": "배의 모든 널빤지를 점차 교체한 뒤, 그렇게 생긴 배가 원래 배와 수적으로 동일한 배라고 주장한다.",
+      "expected_label": "underdetermined",
+      "transformations": [
+        "After all of an object's components are replaced one by one, it remains the very same object.",
+        "The completely rebuilt ship is identical, not merely similar, to the original.",
+        "Does replacing every component of a ship cause it to cease being the same ship?"
+      ],
+      "coherent_control": "Every plank of a ship is repainted, and the ship remains the same ship.",
+      "control_expected_label": "coherent"
+    },
+    {
+      "id": "colorless_green_001",
+      "name": "Colorless green ideas",
+      "category": "semantic_anomaly",
+      "statement_en": "Colorless green ideas sleep furiously.",
+      "statement_ko": "무색의 초록 관념들이 격렬하게 잠든다.",
+      "expected_label": "underdetermined",
+      "transformations": [
+        "Furiously sleeping ideas are both green and colorless.",
+        "Ideas without color possess greenness and engage in furious sleep.",
+        "Is the grammatical sentence 'Colorless green ideas sleep furiously' semantically coherent?"
+      ],
+      "coherent_control": "Exhausted children sleep soundly.",
+      "control_expected_label": "coherent"
+    },
+    {
+      "id": "mod_paris_true",
+      "name": "Paris — true",
+      "category": "modality_true",
+      "statement_en": "Paris is the capital of France.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_paris_false",
+      "name": "Paris — false",
+      "category": "modality_false",
+      "statement_en": "Paris is the capital of Germany.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_paris_improbable",
+      "name": "Paris — improbable",
+      "category": "modality_improbable",
+      "statement_en": "Every train into Paris arrived exactly on time for an entire month.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_paris_anomalous",
+      "name": "Paris — anomalous",
+      "category": "modality_anomalous",
+      "statement_en": "Paris quietly drinks its own gray arithmetic every evening.",
+      "expected_label": "underdetermined"
+    },
+    {
+      "id": "mod_paris_impossible",
+      "name": "Paris — impossible",
+      "category": "modality_impossible",
+      "statement_en": "Paris is larger than itself.",
+      "expected_label": "contradiction"
+    },
+    {
+      "id": "mod_water_true",
+      "name": "Boiling water — true",
+      "category": "modality_true",
+      "statement_en": "At sea level, water boils at about one hundred degrees Celsius.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_water_false",
+      "name": "Boiling water — false",
+      "category": "modality_false",
+      "statement_en": "At sea level, water boils at about fifty degrees Celsius.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_water_improbable",
+      "name": "Boiling water — improbable",
+      "category": "modality_improbable",
+      "statement_en": "One determined cook boiled the same kettle four hundred times in a single day.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_water_anomalous",
+      "name": "Boiling water — anomalous",
+      "category": "modality_anomalous",
+      "statement_en": "The boiling water argued with its own steam about the ethics of temperature.",
+      "expected_label": "underdetermined"
+    },
+    {
+      "id": "mod_water_impossible",
+      "name": "Boiling water — impossible",
+      "category": "modality_impossible",
+      "statement_en": "The water in this kettle froze solid while remaining entirely liquid.",
+      "expected_label": "contradiction"
+    },
+    {
+      "id": "mod_heart_true",
+      "name": "Heart — true",
+      "category": "modality_true",
+      "statement_en": "The human heart pumps blood through the body.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_heart_false",
+      "name": "Heart — false",
+      "category": "modality_false",
+      "statement_en": "The human heart is located inside the skull.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_heart_improbable",
+      "name": "Heart — improbable",
+      "category": "modality_improbable",
+      "statement_en": "A patient's resting heart rate stayed at exactly sixty beats per minute for a full day.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_heart_anomalous",
+      "name": "Heart — anomalous",
+      "category": "modality_anomalous",
+      "statement_en": "The heart files its red paperwork under a language of thumps.",
+      "expected_label": "underdetermined"
+    },
+    {
+      "id": "mod_heart_impossible",
+      "name": "Heart — impossible",
+      "category": "modality_impossible",
+      "statement_en": "The heart completed its final beat before its first beat.",
+      "expected_label": "contradiction"
+    },
+    {
+      "id": "mod_everest_true",
+      "name": "Everest — true",
+      "category": "modality_true",
+      "statement_en": "Mount Everest is the tallest mountain on Earth.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_everest_false",
+      "name": "Everest — false",
+      "category": "modality_false",
+      "statement_en": "Mount Everest is located in the Alps.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_everest_improbable",
+      "name": "Everest — improbable",
+      "category": "modality_improbable",
+      "statement_en": "An eighty-year-old climber reached the summit of Everest twice in one season.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_everest_anomalous",
+      "name": "Everest — anomalous",
+      "category": "modality_anomalous",
+      "statement_en": "Everest rehearses its patient snow in green syllables.",
+      "expected_label": "underdetermined"
+    },
+    {
+      "id": "mod_everest_impossible",
+      "name": "Everest — impossible",
+      "category": "modality_impossible",
+      "statement_en": "Mount Everest is taller than Mount Everest.",
+      "expected_label": "contradiction"
+    },
+    {
+      "id": "mod_whale_true",
+      "name": "Whale — true",
+      "category": "modality_true",
+      "statement_en": "Whales are mammals that breathe air.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_whale_false",
+      "name": "Whale — false",
+      "category": "modality_false",
+      "statement_en": "Whales are fish that breathe through gills.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_whale_improbable",
+      "name": "Whale — improbable",
+      "category": "modality_improbable",
+      "statement_en": "A lone whale followed the same cargo ship for ten consecutive years.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_whale_anomalous",
+      "name": "Whale — anomalous",
+      "category": "modality_anomalous",
+      "statement_en": "The whale swallowed a polite argument and swam through its own name.",
+      "expected_label": "underdetermined"
+    },
+    {
+      "id": "mod_whale_impossible",
+      "name": "Whale — impossible",
+      "category": "modality_impossible",
+      "statement_en": "This whale is the biological mother of her own mother.",
+      "expected_label": "contradiction"
+    },
+    {
+      "id": "mod_rain_true",
+      "name": "Rain — true",
+      "category": "modality_true",
+      "statement_en": "Rain falls from clouds in the sky.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_rain_false",
+      "name": "Rain — false",
+      "category": "modality_false",
+      "statement_en": "Rain is composed mostly of salt water.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_rain_improbable",
+      "name": "Rain — improbable",
+      "category": "modality_improbable",
+      "statement_en": "Rain fell on this town every single day for two full years.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_rain_anomalous",
+      "name": "Rain — anomalous",
+      "category": "modality_anomalous",
+      "statement_en": "The rain divided its gray ideas among the impatient umbrellas.",
+      "expected_label": "underdetermined"
+    },
+    {
+      "id": "mod_rain_impossible",
+      "name": "Rain — impossible",
+      "category": "modality_impossible",
+      "statement_en": "More rain fell this morning than fell during the whole day that contains this morning.",
+      "expected_label": "contradiction"
+    },
+    {
+      "id": "mod_apple_true",
+      "name": "Apples — true",
+      "category": "modality_true",
+      "statement_en": "Apples grow on trees.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_apple_false",
+      "name": "Apples — false",
+      "category": "modality_false",
+      "statement_en": "Apples grow underground like potatoes.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_apple_improbable",
+      "name": "Apples — improbable",
+      "category": "modality_improbable",
+      "statement_en": "Every apple in the orchard fell to the ground during the same minute.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_apple_anomalous",
+      "name": "Apples — anomalous",
+      "category": "modality_anomalous",
+      "statement_en": "The apples counted their green silence backwards into ripeness.",
+      "expected_label": "underdetermined"
+    },
+    {
+      "id": "mod_apple_impossible",
+      "name": "Apples — impossible",
+      "category": "modality_impossible",
+      "statement_en": "The basket holds more apples than it holds pieces of fruit.",
+      "expected_label": "contradiction"
+    },
+    {
+      "id": "mod_bachelor_true",
+      "name": "Bachelor — true",
+      "category": "modality_true",
+      "statement_en": "Some bachelors eventually marry.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_bachelor_false",
+      "name": "Bachelor — false",
+      "category": "modality_false",
+      "statement_en": "Most bachelors in the world are over ninety years old.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_bachelor_improbable",
+      "name": "Bachelor — improbable",
+      "category": "modality_improbable",
+      "statement_en": "Every bachelor in the village got married on the same afternoon.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_bachelor_anomalous",
+      "name": "Bachelor — anomalous",
+      "category": "modality_anomalous",
+      "statement_en": "A bachelor of pale arithmetic proposed to the idea of Tuesday.",
+      "expected_label": "underdetermined"
+    },
+    {
+      "id": "mod_bachelor_impossible",
+      "name": "Bachelor — impossible",
+      "category": "modality_impossible",
+      "statement_en": "A married bachelor lives in the village.",
+      "expected_label": "contradiction"
+    },
+    {
+      "id": "mod_triangle_true",
+      "name": "Triangle — true",
+      "category": "modality_true",
+      "statement_en": "A triangle has exactly three sides.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_triangle_false",
+      "name": "Triangle — false",
+      "category": "modality_false",
+      "statement_en": "Triangles were first described by mathematicians only in the nineteenth century.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_triangle_improbable",
+      "name": "Triangle — improbable",
+      "category": "modality_improbable",
+      "statement_en": "A student drew ten thousand triangles by hand in one afternoon.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_triangle_anomalous",
+      "name": "Triangle — anomalous",
+      "category": "modality_anomalous",
+      "statement_en": "The triangle sleeps soundly inside its own colorless angles.",
+      "expected_label": "underdetermined"
+    },
+    {
+      "id": "mod_triangle_impossible",
+      "name": "Triangle — impossible",
+      "category": "modality_impossible",
+      "statement_en": "This Euclidean triangle has exactly four sides.",
+      "expected_label": "contradiction"
+    },
+    {
+      "id": "mod_grandmother_true",
+      "name": "Grandmother — true",
+      "category": "modality_true",
+      "statement_en": "Many grandmothers help raise their grandchildren.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_grandmother_false",
+      "name": "Grandmother — false",
+      "category": "modality_false",
+      "statement_en": "Most grandmothers today are under thirty years old.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_grandmother_improbable",
+      "name": "Grandmother — improbable",
+      "category": "modality_improbable",
+      "statement_en": "One woman became a great-grandmother at the age of fifty.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_grandmother_anomalous",
+      "name": "Grandmother — anomalous",
+      "category": "modality_anomalous",
+      "statement_en": "Grandmother knitted a sweater out of warm green silence.",
+      "expected_label": "underdetermined"
+    },
+    {
+      "id": "mod_grandmother_impossible",
+      "name": "Grandmother — impossible",
+      "category": "modality_impossible",
+      "statement_en": "She is her own biological grandmother.",
+      "expected_label": "contradiction"
+    },
+    {
+      "id": "mod_sun_true",
+      "name": "Sun — true",
+      "category": "modality_true",
+      "statement_en": "The sun rises in the east.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_sun_false",
+      "name": "Sun — false",
+      "category": "modality_false",
+      "statement_en": "The sun is smaller than the Earth.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_sun_improbable",
+      "name": "Sun — improbable",
+      "category": "modality_improbable",
+      "statement_en": "The coastal town saw five hundred consecutive days without a single cloud.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_sun_anomalous",
+      "name": "Sun — anomalous",
+      "category": "modality_anomalous",
+      "statement_en": "The sun whispers its yellow logic to a sleeping number.",
+      "expected_label": "underdetermined"
+    },
+    {
+      "id": "mod_sun_impossible",
+      "name": "Sun — impossible",
+      "category": "modality_impossible",
+      "statement_en": "Tomorrow's sunrise took place yesterday.",
+      "expected_label": "contradiction"
+    },
+    {
+      "id": "mod_library_true",
+      "name": "Library — true",
+      "category": "modality_true",
+      "statement_en": "Public libraries lend books to readers.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_library_false",
+      "name": "Library — false",
+      "category": "modality_false",
+      "statement_en": "Most public libraries were abolished worldwide in the nineteen nineties.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_library_improbable",
+      "name": "Library — improbable",
+      "category": "modality_improbable",
+      "statement_en": "One reader borrowed and finished a library book every day for forty years.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_library_anomalous",
+      "name": "Library — anomalous",
+      "category": "modality_anomalous",
+      "statement_en": "The library shelves its dusty Tuesdays in alphabetical order.",
+      "expected_label": "underdetermined"
+    },
+    {
+      "id": "mod_library_impossible",
+      "name": "Library — impossible",
+      "category": "modality_impossible",
+      "statement_en": "This library contains more books than the total number of books in existence.",
+      "expected_label": "contradiction"
+    },
+    {
+      "id": "mod_gold_true",
+      "name": "Gold — true",
+      "category": "modality_true",
+      "statement_en": "Gold is a metal that does not rust.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_gold_false",
+      "name": "Gold — false",
+      "category": "modality_false",
+      "statement_en": "Gold rusts within days when exposed to dry air.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_gold_improbable",
+      "name": "Gold — improbable",
+      "category": "modality_improbable",
+      "statement_en": "A hiker found gold nuggets on three separate walks in a single week.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_gold_anomalous",
+      "name": "Gold — anomalous",
+      "category": "modality_anomalous",
+      "statement_en": "The gold counts its heavy yellow dreams every night.",
+      "expected_label": "underdetermined"
+    },
+    {
+      "id": "mod_gold_impossible",
+      "name": "Gold — impossible",
+      "category": "modality_impossible",
+      "statement_en": "This ring is made entirely of gold and contains no gold at all.",
+      "expected_label": "contradiction"
+    },
+    {
+      "id": "mod_penguin_true",
+      "name": "Penguin — true",
+      "category": "modality_true",
+      "statement_en": "Penguins are birds that cannot fly.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_penguin_false",
+      "name": "Penguin — false",
+      "category": "modality_false",
+      "statement_en": "Penguins live wild at the North Pole.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_penguin_improbable",
+      "name": "Penguin — improbable",
+      "category": "modality_improbable",
+      "statement_en": "A penguin wandered one hundred kilometers inland and returned to the colony unharmed.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_penguin_anomalous",
+      "name": "Penguin — anomalous",
+      "category": "modality_anomalous",
+      "statement_en": "The penguin recites its colorless ice to a distant equator.",
+      "expected_label": "underdetermined"
+    },
+    {
+      "id": "mod_penguin_impossible",
+      "name": "Penguin — impossible",
+      "category": "modality_impossible",
+      "statement_en": "This penguin is a bird and is not a bird, in the very same sense.",
+      "expected_label": "contradiction"
+    },
+    {
+      "id": "mod_train_true",
+      "name": "Train — true",
+      "category": "modality_true",
+      "statement_en": "Trains run on rails.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_train_false",
+      "name": "Train — false",
+      "category": "modality_false",
+      "statement_en": "Most modern passenger trains are pulled by teams of horses.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_train_improbable",
+      "name": "Train — improbable",
+      "category": "modality_improbable",
+      "statement_en": "The night train arrived early every single day for an entire year.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_train_anomalous",
+      "name": "Train — anomalous",
+      "category": "modality_anomalous",
+      "statement_en": "The train devours a timetable of green minutes.",
+      "expected_label": "underdetermined"
+    },
+    {
+      "id": "mod_train_impossible",
+      "name": "Train — impossible",
+      "category": "modality_impossible",
+      "statement_en": "On the same trip, the train arrived at its destination before it departed.",
+      "expected_label": "contradiction"
+    }
+  ]
+}

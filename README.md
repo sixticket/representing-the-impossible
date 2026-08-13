@@ -1,104 +1,97 @@
-# When Language Describes the Impossible
+# Falsehood and Impossibility Are Different Directions in an AI's Representation of Language
 
-An exploratory mechanistic-interpretability study of how Gemma 3 4B IT
-processes coherent statements, contradictions, paradoxes, and underdetermined
-philosophical cases.
-
-The repository contains the 85-stimulus dataset, activation-extraction code,
-group-held-out probe and control analyses, Gemma Scope 2 SAE analysis, plotting
-code, a compact reference run, and the LaTeX manuscript. The included results
-support reproducibility without redistributing model or SAE weights.
+Code and stimuli for an exploratory activation study of Gemma 3 4B IT. The
+study asks whether the model internally distinguishes statements that are
+merely false ("Paris is the capital of Germany") from statements that could
+not be the case at all ("Mount Everest is taller than Mount Everest"), and
+finds that the two are carried by nearly orthogonal linear directions, while
+the model's verbal labels conflate them.
 
 ## Repository layout
 
 ```text
-data/                    Stimulus families and prompt template
-results/reference_run/   Published responses, activations, and SAE features
-figure/                  Generated figures and summary statistics
-paper/                   LaTeX source, bibliography, figures, and compiled PDF
-extract_activations.py   Model inference and residual-stream extraction
-analyze_sae.py           Gemma Scope 2 feature encoding and ranking
-analyze_controls.py      TF-IDF, permutation, and residual-norm controls
-plot_figures.py          Main analyses and publication figures
+data/
+  questions_philosophical.json   17 philosophical families (85 prompts)
+  questions_modality.json        15 topic families x 5 modality conditions (75 prompts)
+  questions_combined.json        Both sets merged; input for the reported run
+results/reference_run/           Published responses and derived statistics
+extract_activations.py           Model inference and residual-stream extraction
+analyze_axes.py                  Held-out probes, transfer AUCs, direction cosines,
+                                 permutation test, surface baselines (Fig. 2)
+analyze_sae.py                   Gemma Scope 2 SAE encoding of one layer
+analyze_sae_modality.py          SAE feature ranking by modality contrasts (Table 3)
+plot_behavior.py                 Behavioral figure for the philosophical set (Fig. 1)
 ```
 
 ## Setup
 
-Python 3.11 is recommended.
+Python 3.10+ (3.11 used for the reported run).
 
 ```bash
-git clone https://github.com/sixticket/representing-the-impossible.git
-cd llm-represent
 python3.11 -m venv venv
 source venv/bin/activate
 python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
 ```
 
-Gemma 3 is a gated Hugging Face model. For a new download, accept Google's
-Gemma license on Hugging Face and authenticate with `hf auth login`.
+Gemma 3 is a gated Hugging Face model: accept Google's Gemma license on
+Hugging Face and authenticate with `hf auth login` before the first download.
+The extraction script itself runs offline from the local cache
+(`~/.cache/huggingface/hub/models--google--gemma-3-4b-it` by default; override
+with `--model-cache`).
 
-## Reproduce the included analyses
+## Pipeline
 
-The compact reference run is already present, so the figures and controls do
-not require loading Gemma or downloading model weights.
+1. **Extract activations** (about 4 minutes on an Apple M-series GPU; also runs
+   on CUDA or CPU):
 
-```bash
-python plot_figures.py results/reference_run
-python analyze_controls.py results/reference_run
-```
+   ```bash
+   python extract_activations.py --output-dir results/run
+   ```
 
-These commands update files under `figure/`. To encode the included activations
-with the official SAE (download required on first use), run:
+   Writes `records.jsonl` (prompts, greedy responses, parsed labels),
+   `activations.npz` (`[160, 35, 2560]` float16: embedding output plus 34
+   layers at the final prompt token), and `run_config.json`.
 
-```bash
-python analyze_sae.py results/reference_run
-```
+2. **Probe geometry** (probes, transfer, cosines, permutation test, baselines;
+   produces `figure/figure5_axes.[pdf,png]`, manuscript Fig. 2):
 
-## Run a new extraction
+   ```bash
+   python analyze_axes.py results/run
+   ```
 
-Run a two-prompt smoke test before processing all 85 stimuli:
+   Results are written to `results/run/axes/axes_results.json`. The reported
+   impossibility peak is at hidden-state depth 16, i.e. transformer layer 15.
 
-```bash
-python extract_activations.py --limit 2
-python extract_activations.py
-```
+3. **SAE encoding** at the probe peak layer (downloads the Gemma Scope 2 SAE
+   into the Hugging Face cache on first use):
 
-To use an existing local Hugging Face cache directory or resolved snapshot
-without network access:
+   ```bash
+   python analyze_sae.py results/run --sae-id layer_15_width_16k_l0_small
+   python analyze_sae.py results/run --sae-id layer_15_width_16k_l0_big
+   python analyze_sae_modality.py results/run --sae-id layer_15_width_16k_l0_big
+   ```
 
-```bash
-python extract_activations.py \
-  --model /path/to/models--google--gemma-3-4b-it \
-  --local-files-only
-```
+   The modality contrast writes
+   `results/run/sae/<sae-id>/modality_feature_contrasts.json`
+   (manuscript Table 3).
 
-Each run is saved under `results/gemma3_4b_<timestamp>/`. The activation array
-has shape `[prompt, representation depth, residual width]`; depth zero is the
-embedding output and subsequent entries are transformer-layer outputs at the
-final prompt token.
+4. **Behavioral figure** (manuscript Fig. 1):
 
-## Build the paper
+   ```bash
+   python plot_behavior.py results/run
+   ```
 
-```bash
-cd paper
-tectonic main.tex
-```
+## Reference run
 
-Standard `latexmk` or `pdflatex`/`bibtex` workflows also work. The Springer
-Nature class and bibliography style are retained to make the source bundle
-self-contained.
+`results/reference_run/` contains the exact model responses
+(`records.jsonl`), run configuration, probe/transfer statistics
+(`axes/axes_results.json`), and SAE outputs behind the manuscript's numbers.
+The 21 MB raw activation array is not committed; extraction is deterministic
+(greedy decoding), and a re-run reproduced all 85 philosophical predictions of
+an earlier independent run exactly.
 
-## Scope
+## Citation
 
-This is a deliberately small, correlational study: one model, 17 stimulus
-families, 85 prompts, and no causal intervention. Probe decodability is not
-evidence for a unitary philosophical concept, and the reported SAE features are
-candidate correlates rather than identified “paradox neurons.” See the paper
-for the complete limitations and controls.
-
-## Citation and license
-
-Citation metadata are provided in `CITATION.cff`. The project code and original
-data are released under the MIT License. Model weights, SAE weights, and the
-Springer Nature template files remain subject to their respective terms.
+See `CITATION.cff`. Model weights and SAE weights are governed by their
+upstream licenses; see `THIRD_PARTY_NOTICES.md`.

@@ -1,0 +1,40 @@
+{
+  "source_run": "/Users/yoon/project/my/llm_represent/results/gemma3_4b_combined_20260812",
+  "release": "gemma-scope-2-4b-it-res-all",
+  "sae_id": "layer_15_width_16k_l0_big",
+  "transformer_layer": 15,
+  "activation_column": 16,
+  "input_shape": [
+    160,
+    2560
+  ],
+  "feature_shape": [
+    160,
+    16384
+  ],
+  "mean_active_features_per_prompt": 90.51875,
+  "median_active_features_per_prompt": 91.0,
+  "sae_config": {
+    "d_in": 2560,
+    "d_sae": 16384,
+    "dtype": "float32",
+    "apply_b_dec_to_input": false,
+    "normalize_activations": "none",
+    "reshape_activations": "none",
+    "device": "cpu",
+    "metadata": {
+      "model_name": "google/gemma-3-4b-it",
+      "hook_name": "blocks.15.hook_resid_post",
+      "hook_head_index": null,
+      "sae_lens_training_version": null,
+      "prepend_bos": true,
+      "dataset_path": "monology/pile-uncopyrighted",
+      "context_size": 1024,
+      "hf_hook_name": "model.layers.15.output",
+      "neuronpedia_id": null
+    },
+    "architecture": "jumprelu"
+  },
+  "sparsity_shape": null,
+  "interpretation_warning": "Ranked features are correlational candidates from a small labeled set, not proven paradox or coherence detectors."
+}

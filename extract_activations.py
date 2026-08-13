@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Ask Gemma 3 the seed questions and extract layer-wise hidden states.
 
-The model can be loaded by Hugging Face model ID or from a local snapshot.
+The model cache is opened with local_files_only=True and is never modified.
 For each stimulus, the script stores the hidden state at the final prompt token,
 immediately before answer generation. Row i in activations.npz corresponds to
 the record whose activation_index is i in records.jsonl.
@@ -19,6 +19,9 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
+# Prevent accidental network access or cache downloads before importing HF.
+os.environ.setdefault("HF_HUB_OFFLINE", "1")
+os.environ.setdefault("TRANSFORMERS_OFFLINE", "1")
 os.environ.setdefault("TOKENIZERS_PARALLELISM", "false")
 
 import numpy as np
@@ -28,25 +31,23 @@ from transformers import AutoTokenizer, Gemma3ForConditionalGeneration
 
 
 PROJECT_DIR = Path(__file__).resolve().parent
-DEFAULT_QUESTIONS = PROJECT_DIR / "data" / "questions_philosophical.json"
-DEFAULT_MODEL = "google/gemma-3-4b-it"
+DEFAULT_QUESTIONS = PROJECT_DIR / "data" / "questions_combined.json"
+DEFAULT_MODEL_CACHE = (
+    Path.home() / ".cache" / "huggingface" / "hub" / "models--google--gemma-3-4b-it"
+)
 LABELS = ("coherent", "contradiction", "paradox", "underdetermined")
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Run philosophical stimuli through Gemma 3 and save activations."
+        description="Run philosophical stimuli through local Gemma 3 and save activations."
     )
     parser.add_argument("--questions", type=Path, default=DEFAULT_QUESTIONS)
     parser.add_argument(
-        "--model",
-        default=DEFAULT_MODEL,
-        help="Hugging Face model ID, cache directory, or resolved snapshot directory.",
-    )
-    parser.add_argument(
-        "--local-files-only",
-        action="store_true",
-        help="Disable downloads; use this with an existing local model cache or snapshot.",
+        "--model-cache",
+        type=Path,
+        default=DEFAULT_MODEL_CACHE,
+        help="HF cache model directory or a resolved snapshot directory.",
     )
     parser.add_argument(
         "--output-dir",
@@ -95,14 +96,6 @@ def resolve_snapshot(path: Path) -> Path:
     raise FileNotFoundError(f"No complete local model snapshot found under: {path}")
 
 
-def resolve_model_source(value: str) -> str | Path:
-    """Return a model ID unchanged, or resolve a local cache path to a snapshot."""
-    candidate = Path(value).expanduser()
-    if candidate.exists():
-        return resolve_snapshot(candidate)
-    return value
-
-
 def choose_device(requested: str) -> torch.device:
     if requested != "auto":
         device = torch.device(requested)
@@ -138,14 +131,6 @@ def file_sha256(path: Path) -> str:
         for chunk in iter(lambda: handle.read(1024 * 1024), b""):
             digest.update(chunk)
     return digest.hexdigest()
-
-
-def portable_path(path: Path) -> str:
-    """Prefer a repository-relative path when the file lives in this project."""
-    try:
-        return str(path.resolve().relative_to(PROJECT_DIR))
-    except ValueError:
-        return str(path.resolve())
 
 
 def load_stimuli(path: Path) -> tuple[list[dict[str, Any]], dict[str, Any]]:
@@ -240,7 +225,7 @@ def save_checkpoint(
 def main() -> int:
     args = parse_args()
     question_path = args.questions.expanduser().resolve()
-    model_source = resolve_model_source(args.model)
+    snapshot = resolve_snapshot(args.model_cache)
     device = choose_device(args.device)
     dtype = choose_dtype(args.dtype, device)
 
@@ -258,19 +243,17 @@ def main() -> int:
             raise ValueError("--limit must be at least 1")
         stimuli = stimuli[: args.limit]
 
-    print(f"Model source   : {model_source}")
+    print(f"Model snapshot : {snapshot}")
     print(f"Questions      : {question_path}")
     print(f"Stimuli        : {len(stimuli)}")
     print(f"Device / dtype : {device} / {dtype}")
     print(f"Output         : {output_dir}")
-    print(f"Local only     : {args.local_files_only}")
+    print("Offline mode   : enabled (the model cache will not be modified)")
 
-    tokenizer = AutoTokenizer.from_pretrained(
-        model_source, local_files_only=args.local_files_only
-    )
+    tokenizer = AutoTokenizer.from_pretrained(snapshot, local_files_only=True)
     model = Gemma3ForConditionalGeneration.from_pretrained(
-        model_source,
-        local_files_only=args.local_files_only,
+        snapshot,
+        local_files_only=True,
         dtype=dtype,
         low_cpu_mem_usage=True,
     )
@@ -279,11 +262,11 @@ def main() -> int:
 
     run_config = {
         "created_at": datetime.now().astimezone().isoformat(),
-        "model_source": str(model_source),
+        "model_snapshot": str(snapshot),
         "model_class": type(model).__name__,
         "device": str(device),
         "dtype": str(dtype),
-        "questions_file": portable_path(question_path),
+        "questions_file": str(question_path),
         "questions_sha256": file_sha256(question_path),
         "num_stimuli": len(stimuli),
         "max_new_tokens": args.max_new_tokens,

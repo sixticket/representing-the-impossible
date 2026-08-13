@@ -1,0 +1,546 @@
+{
+  "metadata": {
+    "title": "Modality Contrast Set: True, False, Improbable, Anomalous, Impossible",
+    "version": "0.1.0",
+    "primary_language": "en",
+    "purpose": "Topic-matched families separating necessary falsehood (impossibility) from contingent falsehood, improbability, and semantic anomaly.",
+    "design": "Each family shares one topic and contains five declarative statements: a common truth, a contingent falsehood, an improbable-but-possible claim, a semantically anomalous sentence, and a necessarily false (impossible) statement. Impossibility constructions are varied (reflexive comparison, temporal reversal, part-whole counting, definitional violation, kinship circularity, explicit conjunction) to avoid a single lexical template.",
+    "modality_encoding": "The modality of each item is encoded in its id suffix: _true, _false, _improbable, _anomalous, _impossible. The family is the id's middle token.",
+    "response_instruction": "Classify the statement using exactly one label: coherent, contradiction, paradox, or underdetermined. Then explain the classification in one sentence.",
+    "expected_label_mapping": {
+      "true": "coherent",
+      "false": "coherent",
+      "improbable": "coherent",
+      "anomalous": "underdetermined",
+      "impossible": "contradiction"
+    }
+  },
+  "prompt_template": "Statement: {statement}\n\nClassify the statement using exactly one label: coherent, contradiction, paradox, or underdetermined. Then explain the classification in one sentence.",
+  "items": [
+    {
+      "id": "mod_paris_true",
+      "name": "Paris — true",
+      "category": "modality_true",
+      "statement_en": "Paris is the capital of France.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_paris_false",
+      "name": "Paris — false",
+      "category": "modality_false",
+      "statement_en": "Paris is the capital of Germany.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_paris_improbable",
+      "name": "Paris — improbable",
+      "category": "modality_improbable",
+      "statement_en": "Every train into Paris arrived exactly on time for an entire month.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_paris_anomalous",
+      "name": "Paris — anomalous",
+      "category": "modality_anomalous",
+      "statement_en": "Paris quietly drinks its own gray arithmetic every evening.",
+      "expected_label": "underdetermined"
+    },
+    {
+      "id": "mod_paris_impossible",
+      "name": "Paris — impossible",
+      "category": "modality_impossible",
+      "statement_en": "Paris is larger than itself.",
+      "expected_label": "contradiction"
+    },
+    {
+      "id": "mod_water_true",
+      "name": "Boiling water — true",
+      "category": "modality_true",
+      "statement_en": "At sea level, water boils at about one hundred degrees Celsius.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_water_false",
+      "name": "Boiling water — false",
+      "category": "modality_false",
+      "statement_en": "At sea level, water boils at about fifty degrees Celsius.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_water_improbable",
+      "name": "Boiling water — improbable",
+      "category": "modality_improbable",
+      "statement_en": "One determined cook boiled the same kettle four hundred times in a single day.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_water_anomalous",
+      "name": "Boiling water — anomalous",
+      "category": "modality_anomalous",
+      "statement_en": "The boiling water argued with its own steam about the ethics of temperature.",
+      "expected_label": "underdetermined"
+    },
+    {
+      "id": "mod_water_impossible",
+      "name": "Boiling water — impossible",
+      "category": "modality_impossible",
+      "statement_en": "The water in this kettle froze solid while remaining entirely liquid.",
+      "expected_label": "contradiction"
+    },
+    {
+      "id": "mod_heart_true",
+      "name": "Heart — true",
+      "category": "modality_true",
+      "statement_en": "The human heart pumps blood through the body.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_heart_false",
+      "name": "Heart — false",
+      "category": "modality_false",
+      "statement_en": "The human heart is located inside the skull.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_heart_improbable",
+      "name": "Heart — improbable",
+      "category": "modality_improbable",
+      "statement_en": "A patient's resting heart rate stayed at exactly sixty beats per minute for a full day.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_heart_anomalous",
+      "name": "Heart — anomalous",
+      "category": "modality_anomalous",
+      "statement_en": "The heart files its red paperwork under a language of thumps.",
+      "expected_label": "underdetermined"
+    },
+    {
+      "id": "mod_heart_impossible",
+      "name": "Heart — impossible",
+      "category": "modality_impossible",
+      "statement_en": "The heart completed its final beat before its first beat.",
+      "expected_label": "contradiction"
+    },
+    {
+      "id": "mod_everest_true",
+      "name": "Everest — true",
+      "category": "modality_true",
+      "statement_en": "Mount Everest is the tallest mountain on Earth.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_everest_false",
+      "name": "Everest — false",
+      "category": "modality_false",
+      "statement_en": "Mount Everest is located in the Alps.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_everest_improbable",
+      "name": "Everest — improbable",
+      "category": "modality_improbable",
+      "statement_en": "An eighty-year-old climber reached the summit of Everest twice in one season.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_everest_anomalous",
+      "name": "Everest — anomalous",
+      "category": "modality_anomalous",
+      "statement_en": "Everest rehearses its patient snow in green syllables.",
+      "expected_label": "underdetermined"
+    },
+    {
+      "id": "mod_everest_impossible",
+      "name": "Everest — impossible",
+      "category": "modality_impossible",
+      "statement_en": "Mount Everest is taller than Mount Everest.",
+      "expected_label": "contradiction"
+    },
+    {
+      "id": "mod_whale_true",
+      "name": "Whale — true",
+      "category": "modality_true",
+      "statement_en": "Whales are mammals that breathe air.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_whale_false",
+      "name": "Whale — false",
+      "category": "modality_false",
+      "statement_en": "Whales are fish that breathe through gills.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_whale_improbable",
+      "name": "Whale — improbable",
+      "category": "modality_improbable",
+      "statement_en": "A lone whale followed the same cargo ship for ten consecutive years.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_whale_anomalous",
+      "name": "Whale — anomalous",
+      "category": "modality_anomalous",
+      "statement_en": "The whale swallowed a polite argument and swam through its own name.",
+      "expected_label": "underdetermined"
+    },
+    {
+      "id": "mod_whale_impossible",
+      "name": "Whale — impossible",
+      "category": "modality_impossible",
+      "statement_en": "This whale is the biological mother of her own mother.",
+      "expected_label": "contradiction"
+    },
+    {
+      "id": "mod_rain_true",
+      "name": "Rain — true",
+      "category": "modality_true",
+      "statement_en": "Rain falls from clouds in the sky.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_rain_false",
+      "name": "Rain — false",
+      "category": "modality_false",
+      "statement_en": "Rain is composed mostly of salt water.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_rain_improbable",
+      "name": "Rain — improbable",
+      "category": "modality_improbable",
+      "statement_en": "Rain fell on this town every single day for two full years.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_rain_anomalous",
+      "name": "Rain — anomalous",
+      "category": "modality_anomalous",
+      "statement_en": "The rain divided its gray ideas among the impatient umbrellas.",
+      "expected_label": "underdetermined"
+    },
+    {
+      "id": "mod_rain_impossible",
+      "name": "Rain — impossible",
+      "category": "modality_impossible",
+      "statement_en": "More rain fell this morning than fell during the whole day that contains this morning.",
+      "expected_label": "contradiction"
+    },
+    {
+      "id": "mod_apple_true",
+      "name": "Apples — true",
+      "category": "modality_true",
+      "statement_en": "Apples grow on trees.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_apple_false",
+      "name": "Apples — false",
+      "category": "modality_false",
+      "statement_en": "Apples grow underground like potatoes.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_apple_improbable",
+      "name": "Apples — improbable",
+      "category": "modality_improbable",
+      "statement_en": "Every apple in the orchard fell to the ground during the same minute.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_apple_anomalous",
+      "name": "Apples — anomalous",
+      "category": "modality_anomalous",
+      "statement_en": "The apples counted their green silence backwards into ripeness.",
+      "expected_label": "underdetermined"
+    },
+    {
+      "id": "mod_apple_impossible",
+      "name": "Apples — impossible",
+      "category": "modality_impossible",
+      "statement_en": "The basket holds more apples than it holds pieces of fruit.",
+      "expected_label": "contradiction"
+    },
+    {
+      "id": "mod_bachelor_true",
+      "name": "Bachelor — true",
+      "category": "modality_true",
+      "statement_en": "Some bachelors eventually marry.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_bachelor_false",
+      "name": "Bachelor — false",
+      "category": "modality_false",
+      "statement_en": "Most bachelors in the world are over ninety years old.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_bachelor_improbable",
+      "name": "Bachelor — improbable",
+      "category": "modality_improbable",
+      "statement_en": "Every bachelor in the village got married on the same afternoon.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_bachelor_anomalous",
+      "name": "Bachelor — anomalous",
+      "category": "modality_anomalous",
+      "statement_en": "A bachelor of pale arithmetic proposed to the idea of Tuesday.",
+      "expected_label": "underdetermined"
+    },
+    {
+      "id": "mod_bachelor_impossible",
+      "name": "Bachelor — impossible",
+      "category": "modality_impossible",
+      "statement_en": "A married bachelor lives in the village.",
+      "expected_label": "contradiction"
+    },
+    {
+      "id": "mod_triangle_true",
+      "name": "Triangle — true",
+      "category": "modality_true",
+      "statement_en": "A triangle has exactly three sides.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_triangle_false",
+      "name": "Triangle — false",
+      "category": "modality_false",
+      "statement_en": "Triangles were first described by mathematicians only in the nineteenth century.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_triangle_improbable",
+      "name": "Triangle — improbable",
+      "category": "modality_improbable",
+      "statement_en": "A student drew ten thousand triangles by hand in one afternoon.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_triangle_anomalous",
+      "name": "Triangle — anomalous",
+      "category": "modality_anomalous",
+      "statement_en": "The triangle sleeps soundly inside its own colorless angles.",
+      "expected_label": "underdetermined"
+    },
+    {
+      "id": "mod_triangle_impossible",
+      "name": "Triangle — impossible",
+      "category": "modality_impossible",
+      "statement_en": "This Euclidean triangle has exactly four sides.",
+      "expected_label": "contradiction"
+    },
+    {
+      "id": "mod_grandmother_true",
+      "name": "Grandmother — true",
+      "category": "modality_true",
+      "statement_en": "Many grandmothers help raise their grandchildren.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_grandmother_false",
+      "name": "Grandmother — false",
+      "category": "modality_false",
+      "statement_en": "Most grandmothers today are under thirty years old.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_grandmother_improbable",
+      "name": "Grandmother — improbable",
+      "category": "modality_improbable",
+      "statement_en": "One woman became a great-grandmother at the age of fifty.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_grandmother_anomalous",
+      "name": "Grandmother — anomalous",
+      "category": "modality_anomalous",
+      "statement_en": "Grandmother knitted a sweater out of warm green silence.",
+      "expected_label": "underdetermined"
+    },
+    {
+      "id": "mod_grandmother_impossible",
+      "name": "Grandmother — impossible",
+      "category": "modality_impossible",
+      "statement_en": "She is her own biological grandmother.",
+      "expected_label": "contradiction"
+    },
+    {
+      "id": "mod_sun_true",
+      "name": "Sun — true",
+      "category": "modality_true",
+      "statement_en": "The sun rises in the east.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_sun_false",
+      "name": "Sun — false",
+      "category": "modality_false",
+      "statement_en": "The sun is smaller than the Earth.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_sun_improbable",
+      "name": "Sun — improbable",
+      "category": "modality_improbable",
+      "statement_en": "The coastal town saw five hundred consecutive days without a single cloud.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_sun_anomalous",
+      "name": "Sun — anomalous",
+      "category": "modality_anomalous",
+      "statement_en": "The sun whispers its yellow logic to a sleeping number.",
+      "expected_label": "underdetermined"
+    },
+    {
+      "id": "mod_sun_impossible",
+      "name": "Sun — impossible",
+      "category": "modality_impossible",
+      "statement_en": "Tomorrow's sunrise took place yesterday.",
+      "expected_label": "contradiction"
+    },
+    {
+      "id": "mod_library_true",
+      "name": "Library — true",
+      "category": "modality_true",
+      "statement_en": "Public libraries lend books to readers.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_library_false",
+      "name": "Library — false",
+      "category": "modality_false",
+      "statement_en": "Most public libraries were abolished worldwide in the nineteen nineties.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_library_improbable",
+      "name": "Library — improbable",
+      "category": "modality_improbable",
+      "statement_en": "One reader borrowed and finished a library book every day for forty years.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_library_anomalous",
+      "name": "Library — anomalous",
+      "category": "modality_anomalous",
+      "statement_en": "The library shelves its dusty Tuesdays in alphabetical order.",
+      "expected_label": "underdetermined"
+    },
+    {
+      "id": "mod_library_impossible",
+      "name": "Library — impossible",
+      "category": "modality_impossible",
+      "statement_en": "This library contains more books than the total number of books in existence.",
+      "expected_label": "contradiction"
+    },
+    {
+      "id": "mod_gold_true",
+      "name": "Gold — true",
+      "category": "modality_true",
+      "statement_en": "Gold is a metal that does not rust.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_gold_false",
+      "name": "Gold — false",
+      "category": "modality_false",
+      "statement_en": "Gold rusts within days when exposed to dry air.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_gold_improbable",
+      "name": "Gold — improbable",
+      "category": "modality_improbable",
+      "statement_en": "A hiker found gold nuggets on three separate walks in a single week.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_gold_anomalous",
+      "name": "Gold — anomalous",
+      "category": "modality_anomalous",
+      "statement_en": "The gold counts its heavy yellow dreams every night.",
+      "expected_label": "underdetermined"
+    },
+    {
+      "id": "mod_gold_impossible",
+      "name": "Gold — impossible",
+      "category": "modality_impossible",
+      "statement_en": "This ring is made entirely of gold and contains no gold at all.",
+      "expected_label": "contradiction"
+    },
+    {
+      "id": "mod_penguin_true",
+      "name": "Penguin — true",
+      "category": "modality_true",
+      "statement_en": "Penguins are birds that cannot fly.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_penguin_false",
+      "name": "Penguin — false",
+      "category": "modality_false",
+      "statement_en": "Penguins live wild at the North Pole.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_penguin_improbable",
+      "name": "Penguin — improbable",
+      "category": "modality_improbable",
+      "statement_en": "A penguin wandered one hundred kilometers inland and returned to the colony unharmed.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_penguin_anomalous",
+      "name": "Penguin — anomalous",
+      "category": "modality_anomalous",
+      "statement_en": "The penguin recites its colorless ice to a distant equator.",
+      "expected_label": "underdetermined"
+    },
+    {
+      "id": "mod_penguin_impossible",
+      "name": "Penguin — impossible",
+      "category": "modality_impossible",
+      "statement_en": "This penguin is a bird and is not a bird, in the very same sense.",
+      "expected_label": "contradiction"
+    },
+    {
+      "id": "mod_train_true",
+      "name": "Train — true",
+      "category": "modality_true",
+      "statement_en": "Trains run on rails.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_train_false",
+      "name": "Train — false",
+      "category": "modality_false",
+      "statement_en": "Most modern passenger trains are pulled by teams of horses.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_train_improbable",
+      "name": "Train — improbable",
+      "category": "modality_improbable",
+      "statement_en": "The night train arrived early every single day for an entire year.",
+      "expected_label": "coherent"
+    },
+    {
+      "id": "mod_train_anomalous",
+      "name": "Train — anomalous",
+      "category": "modality_anomalous",
+      "statement_en": "The train devours a timetable of green minutes.",
+      "expected_label": "underdetermined"
+    },
+    {
+      "id": "mod_train_impossible",
+      "name": "Train — impossible",
+      "category": "modality_impossible",
+      "statement_en": "On the same trip, the train arrived at its destination before it departed.",
+      "expected_label": "contradiction"
+    }
+  ]
+}
